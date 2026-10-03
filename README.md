@@ -1,5 +1,7 @@
 <div align="center">
 
+![Chest_Banner](Image/BannerImage.jpeg)
+
 # Retail Sales & Basket Analysis
 
 ### SQL-Driven Cohort and Market-Basket Analysis of Multi-Store Grocery Transactions
