@@ -1,0 +1,53 @@
+COPY 24
+COPY 95
+COPY 77
+COPY 9205
+COPY 6
+SET
+           cat_a           |             cat_b              | dept_a  | dept_b  | pair_baskets | expected_adj | excess_baskets | adj_lift 
+---------------------------+--------------------------------+---------+---------+--------------+--------------+----------------+----------
+ CHEESES                   | DELI MEATS                     | DELI    | DELI    |         7132 |         1836 |           5296 |     3.89
+ DRY NOODLES/PASTA         | PASTA SAUCE                    | GROCERY | GROCERY |         6423 |         2043 |           4380 |     3.14
+ FROZEN PIZZA              | FRZN MEAT/MEAT DINNERS         | GROCERY | GROCERY |         7190 |         4105 |           3085 |     1.75
+ TOMATOES                  | VEGETABLES SALAD               | PRODUCE | PRODUCE |         4113 |         1604 |           2509 |     2.56
+ BATH TISSUES              | PAPER TOWELS                   | GROCERY | GROCERY |         3743 |         1269 |           2474 |     2.95
+ BEANS - CANNED GLASS & MW | VEGETABLES - SHELF STABLE      | GROCERY | GROCERY |         4980 |         2524 |           2456 |     1.97
+ APPLES                    | TROPICAL FRUIT                 | PRODUCE | PRODUCE |         6539 |         4169 |           2370 |     1.57
+ BEEF                      | PORK                           | MEAT    | MEAT    |         6516 |         4294 |           2222 |     1.52
+ ONIONS                    | VEGETABLES - ALL OTHERS        | PRODUCE | PRODUCE |         4712 |         2620 |           2092 |     1.80
+ ONIONS                    | PEPPERS-ALL                    | PRODUCE | PRODUCE |         3477 |         1397 |           2080 |     2.49
+ COLD CEREAL               | CONVENIENT BRKFST/WHLSM SNACKS | GROCERY | GROCERY |         5820 |         3742 |           2078 |     1.56
+ TOMATOES                  | VEGETABLES - ALL OTHERS        | PRODUCE | PRODUCE |         4498 |         2504 |           1994 |     1.80
+ CONDIMENTS/SAUCES         | SALD DRSNG/SNDWCH SPRD         | GROCERY | GROCERY |         5036 |         3067 |           1969 |     1.64
+ PEPPERS-ALL               | VEGETABLES - ALL OTHERS        | PRODUCE | PRODUCE |         3330 |         1455 |           1875 |     2.29
+ DRY NOODLES/PASTA         | VEGETABLES - SHELF STABLE      | GROCERY | GROCERY |         5576 |         3709 |           1867 |     1.50
+(15 rows)
+
+            cat_a             |          cat_b           |   dept_a   | dept_b  | pair_baskets | expected_adj | excess_baskets | adj_lift 
+------------------------------+--------------------------+------------+---------+--------------+--------------+----------------+----------
+ BACON                        | EGGS                     | MEAT-PCKGD | GROCERY |         4842 |         3060 |           1782 |     1.58
+ SALAD MIX                    | SALD DRSNG/SNDWCH SPRD   | PRODUCE    | GROCERY |         4422 |         2673 |           1749 |     1.65
+ BREAKFAST SAUSAGE/SANDWICHES | EGGS                     | MEAT-PCKGD | GROCERY |         4526 |         2985 |           1541 |     1.52
+ BREAKFAST SAUSAGE/SANDWICHES | REFRGRATD DOUGH PRODUCTS | MEAT-PCKGD | GROCERY |         2874 |         1589 |           1285 |     1.81
+ FROZEN MEAT                  | FROZEN PIZZA             | MEAT-PCKGD | GROCERY |         3071 |         1807 |           1264 |     1.70
+ HOT DOGS                     | MEAT - SHELF STABLE      | MEAT-PCKGD | GROCERY |         2882 |         1644 |           1238 |     1.75
+ BEEF                         | DRY SAUCES/GRAVY         | MEAT       | GROCERY |         3541 |         2312 |           1229 |     1.53
+ FROZEN MEAT                  | FRZN MEAT/MEAT DINNERS   | MEAT-PCKGD | GROCERY |         2611 |         1722 |            889 |     1.52
+ BROOMS AND MOPS              | HOUSEHOLD CLEANG NEEDS   | DRUG GM    | GROCERY |         1057 |          205 |            852 |     5.14
+ BACON                        | REFRGRATD DOUGH PRODUCTS | MEAT-PCKGD | GROCERY |         2479 |         1635 |            844 |     1.52
+(10 rows)
+
+       cat_a       |          cat_b          | pair_baskets | expected_adj | missing_baskets | adj_lift 
+-------------------+-------------------------+--------------+--------------+-----------------+----------
+ DELI MEATS        | LUNCHMEAT               |         2026 |         3554 |            1528 |     0.57
+ FROZEN PIZZA      | VEGETABLES - ALL OTHERS |         2261 |         3392 |            1131 |     0.67
+ BAKED SWEET GOODS | VEGETABLES - ALL OTHERS |         1803 |         2712 |             909 |     0.66
+ CHEESES           | LUNCHMEAT               |         1615 |         2454 |             839 |     0.66
+ SALAD MIX         | VEGETABLES SALAD        |          990 |         1660 |             670 |     0.60
+ REFRIGERATED      | SOFT DRINKS             |         1356 |         2011 |             655 |     0.67
+ BAG SNACKS        | REFRIGERATED            |          919 |         1508 |             589 |     0.61
+ BEEF              | REFRIGERATED            |          976 |         1470 |             494 |     0.66
+ CIGARETTES        | TROPICAL FRUIT          |          992 |         1484 |             492 |     0.67
+ BAKED SWEET GOODS | PEPPERS-ALL             |          982 |         1435 |             453 |     0.68
+(10 rows)
+

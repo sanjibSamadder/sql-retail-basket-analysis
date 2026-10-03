@@ -1,0 +1,87 @@
+SET
+psql:sql/08_basket_analysis.sql:10: NOTICE:  table "category_pairs" does not exist, skipping
+psql:sql/08_basket_analysis.sql:10: NOTICE:  table "category_stats" does not exist, skipping
+psql:sql/08_basket_analysis.sql:10: NOTICE:  table "basket_category" does not exist, skipping
+DROP TABLE
+SELECT 1871951
+SELECT 301
+DELETE 30698
+CREATE INDEX
+ANALYZE
+SELECT 14820
+ total_baskets | categories_kept | pairs_analysed | pairs_lift_above_1 
+---------------+-----------------+----------------+--------------------
+        250960 |             202 |          14820 |              14304
+(1 row)
+
+       cat_a       |         cat_b          | pair_baskets | expected_baskets | support | confidence_a_to_b | confidence_b_to_a | lift  
+-------------------+------------------------+--------------+------------------+---------+-------------------+-------------------+-------
+ SEAFOOD - MISC    | SEAFOOD-FRESH          |          337 |               17 | 0.00134 |             0.297 |             0.092 | 20.29
+ FROZEN            | REFRIGERATED           |          619 |               32 | 0.00247 |             0.400 |             0.120 | 19.45
+ BABY FOODS        | INFANT CARE PRODUCTS   |          341 |               19 | 0.00136 |             0.081 |             0.300 | 17.82
+ CAT FOOD          | CAT LITTER             |         1292 |               77 | 0.00515 |             0.197 |             0.438 | 16.77
+ BABY FOODS        | INFANT FORMULA         |          718 |               44 | 0.00286 |             0.170 |             0.274 | 16.28
+ SEAFOOD - FROZEN  | SEAFOOD - MISC         |          521 |               34 | 0.00208 |             0.069 |             0.459 | 15.33
+ BABY HBC          | DIAPERS & DISPOSABLES  |         1100 |               72 | 0.00438 |             0.277 |             0.241 | 15.19
+ CEREAL/BREAKFAST  | REFRIGERATED           |          400 |               30 | 0.00159 |             0.274 |             0.077 | 13.30
+ LAUNDRY ADDITIVES | LAUNDRY DETERGENTS     |         1888 |              150 | 0.00752 |             0.424 |             0.223 | 12.58
+ MUSHROOMS         | SQUASH                 |          457 |               38 | 0.00182 |             0.097 |             0.225 | 11.94
+ BROOMS AND MOPS   | HOUSEHOLD CLEANG NEEDS |         1057 |               89 | 0.00421 |             0.348 |             0.143 | 11.82
+ BLEACH            | LAUNDRY ADDITIVES      |          704 |               63 | 0.00281 |             0.199 |             0.158 | 11.20
+ DEODORANTS        | SHAVING CARE PRODUCTS  |          613 |               56 | 0.00244 |             0.144 |             0.187 | 11.01
+ DOMESTIC WINE     | IMPORTED WINE          |          341 |               31 | 0.00136 |             0.075 |             0.197 | 10.94
+ DOG FOODS         | PET CARE SUPPLIES      |          755 |               71 | 0.00301 |             0.106 |             0.301 | 10.62
+(15 rows)
+
+         cat_a          |         cat_b          | pair_baskets | support | lift 
+------------------------+------------------------+--------------+---------+------
+ BAKED BREAD/BUNS/ROLLS | FLUID MILK PRODUCTS    |        30971 | 0.12341 | 1.86
+ FLUID MILK PRODUCTS    | SOFT DRINKS            |        25392 | 0.10118 | 1.29
+ CHEESE                 | FLUID MILK PRODUCTS    |        24551 | 0.09783 | 1.90
+ BAKED BREAD/BUNS/ROLLS | SOFT DRINKS            |        24471 | 0.09751 | 1.42
+ BAKED BREAD/BUNS/ROLLS | CHEESE                 |        23917 | 0.09530 | 2.13
+ BAG SNACKS             | SOFT DRINKS            |        20525 | 0.08179 | 1.72
+ BAG SNACKS             | BAKED BREAD/BUNS/ROLLS |        19611 | 0.07814 | 1.95
+ CHEESE                 | SOFT DRINKS            |        18843 | 0.07508 | 1.41
+ BAKED BREAD/BUNS/ROLLS | BEEF                   |        18799 | 0.07491 | 2.13
+ BAG SNACKS             | FLUID MILK PRODUCTS    |        18314 | 0.07298 | 1.58
+ FLUID MILK PRODUCTS    | TROPICAL FRUIT         |        17881 | 0.07125 | 2.00
+ BEEF                   | FLUID MILK PRODUCTS    |        17816 | 0.07099 | 1.76
+ EGGS                   | FLUID MILK PRODUCTS    |        17254 | 0.06875 | 2.25
+ COLD CEREAL            | FLUID MILK PRODUCTS    |        16830 | 0.06706 | 2.43
+ BAG SNACKS             | CHEESE                 |        16527 | 0.06586 | 2.11
+(15 rows)
+
+        if_basket_has        |     then_also_has      | pair_baskets | confidence | lift 
+-----------------------------+------------------------+--------------+------------+------
+ HOT DOGS                    | BAKED BREAD/BUNS/ROLLS |         7705 |      0.706 | 2.94
+ COLD CEREAL                 | FLUID MILK PRODUCTS    |        16830 |      0.670 | 2.43
+ DELI MEATS                  | BAKED BREAD/BUNS/ROLLS |        10856 |      0.634 | 2.64
+ CHEESES                     | DELI MEATS             |         7132 |      0.630 | 9.24
+ SYRUPS/TOPPINGS             | ICE CREAM/MILK/SHERBTS |          662 |      0.622 | 7.78
+ MEAT - SHELF STABLE         | BAKED BREAD/BUNS/ROLLS |         8565 |      0.621 | 2.59
+ EGGS                        | FLUID MILK PRODUCTS    |        17254 |      0.619 | 2.25
+ COCOA MIXES                 | FLUID MILK PRODUCTS    |         2355 |      0.616 | 2.24
+ DINNER MXS:DRY              | BAKED BREAD/BUNS/ROLLS |         8140 |      0.612 | 2.55
+ MOLASSES/SYRUP/PANCAKE MIXS | FLUID MILK PRODUCTS    |         2729 |      0.605 | 2.19
+ PICKLE/RELISH/PKLD VEG      | BAKED BREAD/BUNS/ROLLS |         3685 |      0.598 | 2.49
+ DINNER MXS:DRY              | FLUID MILK PRODUCTS    |         7937 |      0.597 | 2.16
+ DINNER SAUSAGE              | BAKED BREAD/BUNS/ROLLS |         5882 |      0.596 | 2.48
+ FRZN BREAKFAST FOODS        | FLUID MILK PRODUCTS    |         4356 |      0.596 | 2.16
+ YOGURT                      | FLUID MILK PRODUCTS    |        10446 |      0.594 | 2.15
+(15 rows)
+
+        cat_a        |          cat_b          | pair_baskets | expected_baskets | lift 
+---------------------+-------------------------+--------------+------------------+------
+ CIGARETTES          | YOGURT                  |          386 |              765 | 0.50
+ CIGARETTES          | VEGETABLES - ALL OTHERS |          450 |              711 | 0.63
+ APPLES              | CIGARETTES              |          360 |              575 | 0.63
+ CIGARETTES          | FRUIT - SHELF STABLE    |          373 |              578 | 0.64
+ CIGARETTES          | HISPANIC                |          423 |              620 | 0.68
+ CIGARETTES          | TROPICAL FRUIT          |          992 |             1413 | 0.70
+ CIGARETTES          | COLD CEREAL             |          778 |             1093 | 0.71
+ FLUID MILK PRODUCTS | FRZN ICE                |          468 |              642 | 0.73
+ CIGARETTES          | ICE CREAM/MILK/SHERBTS  |          649 |              873 | 0.74
+ BEERS/ALES          | BREAKFAST SWEETS        |          374 |              503 | 0.74
+(10 rows)
+

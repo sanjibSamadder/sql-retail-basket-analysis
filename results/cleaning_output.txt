@@ -1,0 +1,75 @@
+SET
+BEGIN
+psql:sql/04_cleaning.sql:10: NOTICE:  table "transaction_items" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "transactions" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "customers" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "stores" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "products" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "calendar" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "work_lines" does not exist, skipping
+psql:sql/04_cleaning.sql:10: NOTICE:  table "cleaning_log" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+INSERT 0 711
+INSERT 0 92353
+SELECT 2595732
+CREATE TABLE
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2500
+INSERT 0 556
+INSERT 0 250960
+INSERT 0 2544612
+DROP TABLE
+COMMIT
+ANALYZE
+ step |                     rule                     |     action     | rows_affected | pct_of_raw_rows | revenue_affected 
+------+----------------------------------------------+----------------+---------------+-----------------+------------------
+    0 | Raw lines in staging                         | start          |       2595732 |          100.00 |       8057463.08
+    1 | No revenue (sales_value = 0)                 | removed        |         18879 |            0.73 |             0.00
+    2 | Non-merchandise (fuel, coupons, misc, blank) | removed        |         32241 |            1.24 |        681624.27
+    3 | Quantity = 0 but revenue > 0                 | kept + flagged |            37 |            0.00 |            19.18
+    4 | Quantity > 100                               | kept + flagged |             1 |            0.00 |            24.00
+    5 | Clean lines in transaction_items             | end            |       2544612 |           98.03 |       7375838.81
+(6 rows)
+
+       table_name       | row_count 
+------------------------+-----------
+ calendar               |       711
+ products (all)         |     92353
+ products (merchandise) |     91664
+ customers              |      2500
+ stores                 |       556
+ transactions           |    250960
+ transaction_items      |   2544612
+(7 rows)
+
+ raw_rows | removed |  kept   | unaccounted 
+----------+---------+---------+-------------
+  2595732 |   51120 | 2544612 |           0
+(1 row)
+
+ item_revenue | basket_revenue 
+--------------+----------------
+   7375838.81 |     7375838.81
+(1 row)
+
+ days_with_multiple_weeks 
+--------------------------
+                        0
+(1 row)
+
+ first_date | last_date  | days 
+------------+------------+------
+ 2010-01-01 | 2011-12-12 |  711
+(1 row)
+

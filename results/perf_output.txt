@@ -1,0 +1,131 @@
+SET
+psql:sql/11_performance.sql:8: NOTICE:  index "idx_items_basket" does not exist, skipping
+psql:sql/11_performance.sql:8: NOTICE:  index "idx_trans_household" does not exist, skipping
+DROP INDEX
+ANALYZE
+=== BEFORE INDEXES: Query 1 (basket lookup) ===
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Gather  (cost=1000.00..40503.59 rows=24 width=18) (actual time=2.594..327.952 rows=30.00 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=574 read=25674
+   ->  Parallel Seq Scan on transaction_items i  (cost=0.00..39501.19 rows=10 width=18) (actual time=217.478..325.623 rows=10.00 loops=3)
+         Filter: (basket_id = '27231712736'::bigint)
+         Rows Removed by Filter: 848194
+         Buffers: shared hit=574 read=25674
+ Planning Time: 0.029 ms
+ Execution Time: 327.959 ms
+(10 rows)
+
+=== BEFORE INDEXES: Query 2 (household category spend) ===
+                                                                                        QUERY PLAN                                                                                         
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=44810.51..44810.54 rows=10 width=48) (actual time=328.556..329.469 rows=10.00 loops=1)
+   Buffers: shared hit=3404 read=25392
+   ->  Sort  (cost=44810.51..44811.26 rows=300 width=48) (actual time=328.556..329.468 rows=10.00 loops=1)
+         Sort Key: (sum(i.sales_value)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=3404 read=25392
+         ->  Finalize GroupAggregate  (cost=44705.21..44804.03 rows=300 width=48) (actual time=328.453..329.454 rows=65.00 loops=1)
+               Group Key: p.commodity_desc
+               Buffers: shared hit=3404 read=25392
+               ->  Gather Merge  (cost=44705.21..44794.88 rows=720 width=48) (actual time=328.449..329.381 rows=89.00 loops=1)
+                     Workers Planned: 2
+                     Workers Launched: 2
+                     Buffers: shared hit=3404 read=25392
+                     ->  Partial GroupAggregate  (cost=43705.18..43711.75 rows=300 width=48) (actual time=326.758..326.771 rows=29.67 loops=3)
+                           Group Key: p.commodity_desc
+                           Buffers: shared hit=3404 read=25392
+                           ->  Sort  (cost=43705.18..43706.12 rows=376 width=22) (actual time=326.750..326.752 rows=48.67 loops=3)
+                                 Sort Key: p.commodity_desc
+                                 Sort Method: quicksort  Memory: 25kB
+                                 Buffers: shared hit=3404 read=25392
+                                 Worker 0:  Sort Method: quicksort  Memory: 28kB
+                                 Worker 1:  Sort Method: quicksort  Memory: 26kB
+                                 ->  Nested Loop  (cost=3938.24..43689.10 rows=376 width=22) (actual time=62.562..326.696 rows=48.67 loops=3)
+                                       Buffers: shared hit=3388 read=25392
+                                       ->  Parallel Hash Join  (cost=3937.94..43571.71 rows=376 width=14) (actual time=62.548..326.493 rows=48.67 loops=3)
+                                             Hash Cond: (i.basket_id = t.basket_id)
+                                             Buffers: shared hit=2948 read=25392
+                                             ->  Parallel Seq Scan on transaction_items i  (cost=0.00..36850.55 rows=1060255 width=22) (actual time=0.181..292.126 rows=848204.00 loops=3)
+                                                   Buffers: shared hit=856 read=25392
+                                             ->  Parallel Hash  (cost=3937.29..3937.29 rows=52 width=8) (actual time=2.593..2.594 rows=7.33 loops=3)
+                                                   Buckets: 1024  Batches: 1  Memory Usage: 104kB
+                                                   Buffers: shared hit=2092
+                                                   ->  Parallel Seq Scan on transactions t  (cost=0.00..3937.29 rows=52 width=8) (actual time=0.413..2.578 rows=7.33 loops=3)
+                                                         Filter: (household_key = 501)
+                                                         Rows Removed by Filter: 83646
+                                                         Buffers: shared hit=2092
+                                       ->  Index Scan using products_pkey on products p  (cost=0.29..0.31 rows=1 width=24) (actual time=0.004..0.004 rows=1.00 loops=146)
+                                             Index Cond: (product_id = i.product_id)
+                                             Index Searches: 146
+                                             Buffers: shared hit=440
+ Planning:
+   Buffers: shared hit=26
+ Planning Time: 0.158 ms
+ Execution Time: 329.490 ms
+(44 rows)
+
+CREATE INDEX
+CREATE INDEX
+ANALYZE
+=== AFTER INDEXES: Query 1 (basket lookup) ===
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using idx_items_basket on transaction_items i  (cost=0.43..8.83 rows=23 width=18) (actual time=0.177..0.180 rows=30.00 loops=1)
+   Index Cond: (basket_id = '27231712736'::bigint)
+   Index Searches: 1
+   Buffers: shared read=4
+ Planning:
+   Buffers: shared hit=20 read=1
+ Planning Time: 0.047 ms
+ Execution Time: 0.186 ms
+(8 rows)
+
+=== AFTER INDEXES: Query 2 (household category spend) ===
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1387.57..1387.60 rows=10 width=48) (actual time=5.296..5.297 rows=10.00 loops=1)
+   Buffers: shared hit=500 read=52
+   ->  Sort  (cost=1387.57..1388.32 rows=301 width=48) (actual time=5.295..5.296 rows=10.00 loops=1)
+         Sort Key: (sum(i.sales_value)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=500 read=52
+         ->  HashAggregate  (cost=1377.30..1381.07 rows=301 width=48) (actual time=5.270..5.279 rows=65.00 loops=1)
+               Group Key: p.commodity_desc
+               Batches: 1  Memory Usage: 72kB
+               Buffers: shared hit=500 read=52
+               ->  Nested Loop  (cost=5.70..1372.84 rows=892 width=22) (actual time=0.197..5.227 rows=146.00 loops=1)
+                     Buffers: shared hit=500 read=52
+                     ->  Nested Loop  (cost=5.41..1094.35 rows=892 width=14) (actual time=0.188..4.978 rows=146.00 loops=1)
+                           Buffers: shared hit=62 read=52
+                           ->  Bitmap Heap Scan on transactions t  (cost=4.98..300.85 rows=88 width=8) (actual time=0.013..0.027 rows=22.00 loops=1)
+                                 Recheck Cond: (household_key = 501)
+                                 Heap Blocks: exact=22
+                                 Buffers: shared hit=22 read=2
+                                 ->  Bitmap Index Scan on idx_trans_household  (cost=0.00..4.96 rows=88 width=0) (actual time=0.009..0.009 rows=22.00 loops=1)
+                                       Index Cond: (household_key = 501)
+                                       Index Searches: 1
+                                       Buffers: shared read=2
+                           ->  Index Scan using idx_items_basket on transaction_items i  (cost=0.43..8.79 rows=23 width=22) (actual time=0.186..0.224 rows=6.64 loops=22)
+                                 Index Cond: (basket_id = t.basket_id)
+                                 Index Searches: 22
+                                 Buffers: shared hit=40 read=50
+                     ->  Index Scan using products_pkey on products p  (cost=0.29..0.31 rows=1 width=24) (actual time=0.002..0.002 rows=1.00 loops=146)
+                           Index Cond: (product_id = i.product_id)
+                           Index Searches: 146
+                           Buffers: shared hit=438
+ Planning:
+   Buffers: shared hit=51 read=4
+ Planning Time: 0.184 ms
+ Execution Time: 5.324 ms
+(34 rows)
+
+=== Index sizes ===
+     index_name      |  size   
+---------------------+---------
+ idx_items_basket    | 22 MB
+ idx_trans_household | 1744 kB
+(2 rows)
+

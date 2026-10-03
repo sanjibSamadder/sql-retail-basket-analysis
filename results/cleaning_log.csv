@@ -1,0 +1,7 @@
+step,rule,action,rows_affected,revenue_affected
+0,Raw lines in staging,start,2595732,8057463.08
+1,No revenue (sales_value = 0),removed,18879,0.00
+2,"Non-merchandise (fuel, coupons, misc, blank)",removed,32241,681624.27
+3,Quantity = 0 but revenue > 0,kept + flagged,37,19.18
+4,Quantity > 100,kept + flagged,1,24.00
+5,Clean lines in transaction_items,end,2544612,7375838.81
