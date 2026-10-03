@@ -1,6 +1,6 @@
 <div align="center">
 
-![Chest_Banner](Image/BannerImage.jpeg)
+![Banner Image](images/BannerImage.jpeg)
 
 # Retail Sales & Basket Analysis
 
