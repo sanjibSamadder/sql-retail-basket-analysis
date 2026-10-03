@@ -3,7 +3,7 @@
 
 # Retail Sales & Basket Analysis
 
-<img src="images/BannerImage.jpeg" alt="Banner Image" width="500">
+<img src="images/BannerImage.jpeg" alt="Banner Image" width="600">
 
 
 ### SQL-Driven Cohort and Market-Basket Analysis of Multi-Store Grocery Transactions
